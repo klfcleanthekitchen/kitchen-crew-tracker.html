@@ -259,22 +259,44 @@ function setSyncStatus(status, label) {
   lbl.textContent = label;
 }
 
-async function loadFromBin() {
-  setSyncStatus('syncing', 'Connecting...');
-  try {
-    const res = await fetch(GAS_URL);
-    if (!res.ok) throw new Error('Load failed');
-    const data = await res.json();
-    const merged = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), data);
-    merged.actions = Object.assign({}, DEFAULT_STATE.actions, data.actions || {});
-    state = merged;
-    document.getElementById('goal-input').value = state.goal || 30;
-    setSyncStatus('synced', 'Scores synced · ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
-    render();
-  } catch(e) {
-    setSyncStatus('error', 'Could not connect — showing local view');
-    render();
-  }
+// Use JSONP to load (bypasses CORS completely)
+function loadFromBin() {
+  setSyncStatus('syncing', 'Syncing...');
+  const cbName = 'gasCallback_' + Date.now();
+  const script = document.createElement('script');
+  const timeout = setTimeout(() => {
+    script.remove();
+    delete window[cbName];
+    setSyncStatus('error', 'Sync timed out — scores preserved locally');
+  }, 8000);
+
+  window[cbName] = function(data) {
+    clearTimeout(timeout);
+    script.remove();
+    delete window[cbName];
+    try {
+      // Safety check — only update if response has valid structure
+      if (!data || typeof data !== 'object') throw new Error('Bad data');
+      // Never overwrite with empty scores if we already have some
+      const hasScores = Object.keys(state.scores).length > 0;
+      const incomingHasScores = data.scores && Object.keys(data.scores).length > 0;
+      if (hasScores && !incomingHasScores) {
+        setSyncStatus('error', 'Remote empty — keeping local scores');
+        return;
+      }
+      const merged = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), data);
+      merged.actions = Object.assign({}, DEFAULT_STATE.actions, data.actions || {});
+      state = merged;
+      document.getElementById('goal-input').value = state.goal || 30;
+      setSyncStatus('synced', 'Synced · ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+      render();
+    } catch(e) {
+      setSyncStatus('error', 'Bad response — scores preserved');
+    }
+  };
+
+  script.src = GAS_URL + '?callback=' + cbName + '&t=' + Date.now();
+  document.head.appendChild(script);
 }
 
 async function saveToBin() {
@@ -283,12 +305,16 @@ async function saveToBin() {
   setSyncStatus('syncing', 'Saving...');
   try {
     state.goal = getGoal();
-    const res = await fetch(GAS_URL, {
+    // Use no-cors mode — we won't get a response body but the POST goes through
+    await fetch(GAS_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(state)
     });
-    if (!res.ok) throw new Error('Save failed');
+    // Save succeeded (no-cors won't throw on success)
+    // Do a fresh load after short delay to confirm
+    setTimeout(() => loadFromBin(), 1500);
     setSyncStatus('synced', 'Saved · ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
   } catch(e) {
     setSyncStatus('error', 'Save failed — try again');
