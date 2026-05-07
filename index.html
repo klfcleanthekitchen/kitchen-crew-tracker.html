@@ -3,208 +3,240 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Kitchen Crew Tracker</title>
+<title>🍽️ Kitchen Crew Tracker</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css"/>
 <style>
-  :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f0;
-    --bg-tertiary: #eeeee8;
-    --text-primary: #1a1a1a;
-    --text-secondary: #666660;
-    --text-tertiary: #999994;
-    --border-light: rgba(0,0,0,0.1);
-    --border-mid: rgba(0,0,0,0.18);
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --green-dark: #0F6E56;
-    --green-mid: #1D9E75;
-    --green-light: #E1F5EE;
-    --green-border: #5DCAA5;
-    --blue-dark: #042C53;
-    --blue-mid: #185FA5;
-    --blue-light: #E6F1FB;
-    --blue-border: #85B7EB;
-    --amber-dark: #412402;
-    --amber-light: #FAEEDA;
-    --purple-mid: #534AB7;
+:root {
+  --bg:#f0f4f0;--bg-card:#ffffff;--bg-muted:#f5f7f5;
+  --text:#1a1a1a;--text-muted:#666;--text-faint:#aaa;
+  --border:rgba(0,0,0,0.08);--border-mid:rgba(0,0,0,0.15);
+  --r-md:10px;--r-lg:16px;--r-xl:20px;
+  --green:#1D9E75;--green-dark:#0a5c43;--green-light:#d6f5eb;
+  --blue:#3B82F6;--blue-light:#EFF6FF;
+  --purple:#8B5CF6;--purple-light:#F5F3FF;
+  --amber:#F59E0B;--amber-light:#FFFBEB;
+  --red:#EF4444;--red-light:#FEF2F2;
+  --teal:#0D9488;--teal-light:#F0FDFA;
+  --orange:#F97316;--orange-light:#FFF7ED;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#111714;--bg-card:#1c201c;--bg-muted:#252925;
+    --text:#f0f0f0;--text-muted:#888;--text-faint:#555;
+    --border:rgba(255,255,255,0.08);--border-mid:rgba(255,255,255,0.15);
+    --green-light:#0a2e1e;--blue-light:#0f1f3d;--purple-light:#1a1040;
+    --amber-light:#2a1f05;--red-light:#2a0a0a;--teal-light:#071f1d;--orange-light:#2a1205;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg-primary: #1e1e1e;
-      --bg-secondary: #2a2a2a;
-      --bg-tertiary: #333333;
-      --text-primary: #f0f0f0;
-      --text-secondary: #aaaaaa;
-      --text-tertiary: #777777;
-      --border-light: rgba(255,255,255,0.1);
-      --border-mid: rgba(255,255,255,0.2);
-      --green-dark: #9FE1CB;
-      --green-mid: #1D9E75;
-      --green-light: #0a3328;
-      --green-border: #0F6E56;
-      --blue-dark: #B5D4F4;
-      --blue-mid: #378ADD;
-      --blue-light: #0a1e33;
-      --blue-border: #185FA5;
-      --amber-dark: #FAC775;
-      --amber-light: #2a1a05;
-      --purple-mid: #7F77DD;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-secondary); color: var(--text-primary); min-height: 100vh; padding: 1.5rem 1rem; }
-  .container { max-width: 640px; margin: 0 auto; }
-  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
-  .header-icon { width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--green-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .header-title { font-size: 20px; font-weight: 600; color: var(--text-primary); }
-  .header-sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
-  .stat { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-md); padding: .875rem; }
-  .stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
-  .stat-val { font-size: 22px; font-weight: 600; color: var(--text-primary); }
-  .stat-val.green { color: var(--green-mid); }
-  .sec { font-size: 12px; font-weight: 600; color: var(--text-tertiary); margin-bottom: 10px; letter-spacing: .06em; text-transform: uppercase; }
-  .card { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1.5rem; }
-  .ni-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding: 12px 14px; background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); }
-  .ni-wrap label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
-  .ni { flex: 1; border: none; background: transparent; font-size: 14px; color: var(--text-primary); font-family: inherit; outline: none; }
-  .ni::placeholder { color: var(--text-tertiary); }
-  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.5rem; }
-  .abtn { display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-radius: var(--radius-md); border: 0.5px solid var(--border-mid); background: var(--bg-primary); cursor: pointer; font-size: 13px; color: var(--text-primary); font-family: inherit; transition: background .15s; }
-  .abtn:hover { background: var(--bg-secondary); }
-  .abtn:active { transform: scale(0.98); }
-  .abtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  .abtn i { font-size: 17px; color: var(--green-mid); }
-  .abtn.warn i { color: #BA7517; }
-  .abtn.purple i { color: var(--purple-mid); }
-  .abtn.soap i { color: var(--blue-mid); }
-  .pp { font-size: 11px; padding: 2px 7px; border-radius: 99px; background: var(--green-light); color: var(--green-dark); font-weight: 600; margin-left: auto; flex-shrink: 0; }
-  .lb-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 0.5px solid var(--border-light); }
-  .lb-row:last-child { border-bottom: none; }
-  .lb-rank { font-size: 13px; font-weight: 600; color: var(--text-tertiary); width: 22px; text-align: center; }
-  .lb-rank.gold { color: #BA7517; } .lb-rank.silver { color: #888780; } .lb-rank.bronze { color: #993C1D; }
-  .av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-  .lb-name { flex: 1; font-size: 14px; color: var(--text-primary); }
-  .lb-bar-wrap { width: 70px; height: 5px; background: var(--bg-secondary); border-radius: 99px; overflow: hidden; }
-  .lb-bar { height: 100%; border-radius: 99px; background: var(--green-mid); }
-  .lb-pts { font-size: 13px; font-weight: 600; color: var(--text-primary); min-width: 44px; text-align: right; }
-  .badges-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .badge { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 500; border: 0.5px solid var(--border-light); background: var(--bg-primary); color: var(--text-secondary); }
-  .badge.earned { background: var(--green-light); border-color: var(--green-border); color: var(--green-dark); }
-  .badge.locked { opacity: .4; }
-  .rules-card { background: var(--bg-secondary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
-  .rr { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
-  .rr:last-child { margin-bottom: 0; }
-  .rt { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-  .rt strong { color: var(--text-primary); font-weight: 600; }
-  .empty-msg { padding: 1.25rem; text-align: center; font-size: 13px; color: var(--text-tertiary); }
-  .goal-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding: 12px 14px; background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); }
-  .goal-wrap label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
-  .goal-input { width: 64px; border: none; background: var(--bg-secondary); border-radius: var(--radius-md); font-size: 14px; font-weight: 600; color: var(--text-primary); font-family: inherit; outline: none; text-align: center; padding: 4px 8px; }
-  .goal-hint { font-size: 12px; color: var(--text-tertiary); margin-left: auto; }
-  .race-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 0.5px solid var(--border-light); }
-  .race-row:last-child { border-bottom: none; }
-  .race-name { font-size: 12px; color: var(--text-secondary); width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; }
-  .race-lane { flex: 1; height: 24px; background: var(--bg-secondary); border-radius: 99px; position: relative; overflow: hidden; }
-  .race-runner { position: absolute; top: 0; height: 100%; border-radius: 99px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; transition: width .5s cubic-bezier(.4,0,.2,1); min-width: 28px; }
-  .race-runner-label { font-size: 10px; font-weight: 600; }
-  .race-pts { font-size: 12px; font-weight: 600; color: var(--text-secondary); width: 40px; text-align: right; flex-shrink: 0; }
-  .race-footer { padding: 8px 14px; text-align: right; font-size: 11px; color: var(--text-tertiary); border-top: 0.5px solid var(--border-light); }
-  .sdm-callout { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--blue-light); border: 0.5px solid var(--blue-border); border-radius: var(--radius-md); margin-bottom: 1.5rem; }
-  .sdm-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px; background: #B5D4F4; color: var(--blue-dark); white-space: nowrap; flex-shrink: 0; }
-  .sdm-text { font-size: 13px; color: var(--blue-mid); flex: 1; line-height: 1.4; }
-  .sdm-text strong { font-weight: 700; }
-  .wed-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: var(--amber-light); color: var(--amber-dark); font-weight: 600; margin-left: 8px; }
-  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--green-dark); color: #E1F5EE; padding: 10px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; opacity: 0; pointer-events: none; transition: opacity .3s; white-space: nowrap; z-index: 100; }
-  .toast.show { opacity: 1; }
-  .sync-bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-md); margin-bottom: 1.5rem; font-size: 12px; color: var(--text-tertiary); }
-  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-tertiary); flex-shrink: 0; transition: background .3s; }
-  .sync-dot.synced { background: var(--green-mid); }
-  .sync-dot.syncing { background: #BA7517; }
-  .sync-dot.error { background: #E24B4A; }
-  .reset-btn { margin-left: auto; font-size: 11px; color: #E24B4A; background: none; border: 0.5px solid rgba(226,75,74,0.3); border-radius: var(--radius-md); padding: 3px 10px; cursor: pointer; font-family: inherit; }
-  .reset-btn:hover { background: #FCEBEB; }
-  .footer { text-align: center; font-size: 11px; color: var(--text-tertiary); padding: 1rem 0 0.5rem; }
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:1.25rem 1rem 3rem;}
+.container{max-width:660px;margin:0 auto;}
+.header{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:1rem 1.25rem;background:var(--bg-card);border-radius:var(--r-xl);border:0.5px solid var(--border);}
+.header-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1D9E75,#0a5c43);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(29,158,117,0.3);}
+.header-title{font-size:20px;font-weight:700;color:var(--text);}
+.header-sub{font-size:12px;color:var(--text-muted);margin-top:3px;}
+.sync-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);margin-bottom:1.25rem;font-size:12px;color:var(--text-muted);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--text-faint);flex-shrink:0;transition:background .3s;}
+.sync-dot.synced{background:var(--green);}
+.sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite;}
+.sync-dot.error{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.reset-btn{margin-left:auto;font-size:11px;color:var(--red);background:none;border:0.5px solid rgba(239,68,68,0.3);border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;}
+.reset-btn:hover{background:var(--red-light);}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.25rem;}
+.stat{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:.875rem 1rem;}
+.stat-label{font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px;}
+.stat-val{font-size:24px;font-weight:700;color:var(--text);}
+.stat-val.green{color:var(--green);}
+.sec{font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:10px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+.ni-wrap{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding:13px 16px;background:var(--bg-card);border:2px solid var(--green);border-radius:var(--r-lg);}
+.ni-wrap label{font-size:13px;color:var(--text-muted);white-space:nowrap;font-weight:500;}
+.ni{flex:1;border:none;background:transparent;font-size:15px;font-weight:600;color:var(--text);font-family:inherit;outline:none;}
+.ni::placeholder{color:var(--text-faint);font-weight:400;}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem;}
+.abtn{display:flex;align-items:center;gap:8px;padding:12px 13px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);font-family:inherit;transition:all .15s;text-align:left;}
+.abtn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.abtn:active{transform:scale(0.98);}
+.abtn:disabled{opacity:0.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.abtn i{font-size:18px;flex-shrink:0;}
+.abtn.g{border-color:rgba(29,158,117,0.25);background:linear-gradient(135deg,var(--bg-card),var(--green-light));}
+.abtn.g i{color:var(--green);}
+.abtn.b{border-color:rgba(59,130,246,0.25);background:linear-gradient(135deg,var(--bg-card),var(--blue-light));}
+.abtn.b i{color:var(--blue);}
+.abtn.p{border-color:rgba(139,92,246,0.25);background:linear-gradient(135deg,var(--bg-card),var(--purple-light));}
+.abtn.p i{color:var(--purple);}
+.abtn.t{border-color:rgba(13,148,136,0.25);background:linear-gradient(135deg,var(--bg-card),var(--teal-light));}
+.abtn.t i{color:var(--teal);}
+.abtn.a{border-color:rgba(245,158,11,0.25);background:linear-gradient(135deg,var(--bg-card),var(--amber-light));}
+.abtn.a i{color:var(--amber);}
+.abtn.o{border-color:rgba(249,115,22,0.35);background:linear-gradient(135deg,var(--bg-card),var(--orange-light));}
+.abtn.o i{color:var(--orange);}
+.pp{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:700;margin-left:auto;flex-shrink:0;white-space:nowrap;}
+.pp.g{background:var(--green-light);color:var(--green-dark);}
+.pp.b{background:var(--blue-light);color:#1d4ed8;}
+.pp.p{background:var(--purple-light);color:#5b21b6;}
+.pp.t{background:var(--teal-light);color:#0f766e;}
+.pp.a{background:var(--amber-light);color:#92400e;}
+.pp.o{background:var(--orange-light);color:#9a3412;}
+.sdm-callout{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--blue-light);border:1.5px solid rgba(59,130,246,0.3);border-radius:var(--r-lg);margin-bottom:1.25rem;}
+.sdm-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--blue);color:#fff;white-space:nowrap;flex-shrink:0;letter-spacing:.04em;}
+.sdm-text{font-size:13px;color:#1e40af;flex:1;line-height:1.4;}
+.sdm-text strong{font-weight:700;}
+.goal-wrap{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding:12px 16px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-lg);}
+.goal-wrap label{font-size:13px;color:var(--text-muted);white-space:nowrap;font-weight:500;}
+.goal-input{width:60px;border:1.5px solid var(--green);background:var(--green-light);border-radius:8px;font-size:15px;font-weight:700;color:var(--green-dark);font-family:inherit;outline:none;text-align:center;padding:4px 6px;}
+.goal-hint{font-size:12px;color:var(--text-faint);margin-left:auto;}
+.card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-xl);overflow:hidden;margin-bottom:1.25rem;}
+.race-header{padding:10px 16px;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:space-between;}
+.race-header-title{font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px;}
+.race-header-sub{font-size:11px;color:rgba(255,255,255,0.5);}
+.race-row{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:0.5px solid var(--border);}
+.race-row:last-of-type{border-bottom:none;}
+.race-name{font-size:12px;font-weight:600;color:var(--text-muted);width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;}
+.race-lane{flex:1;height:26px;background:var(--bg-muted);border-radius:99px;position:relative;overflow:hidden;}
+.race-runner{position:absolute;top:0;height:100%;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;transition:width .6s cubic-bezier(.4,0,.2,1);min-width:32px;}
+.race-label{font-size:10px;font-weight:700;}
+.race-pts{font-size:12px;font-weight:700;width:42px;text-align:right;flex-shrink:0;}
+.race-footer{padding:8px 16px;text-align:right;font-size:11px;color:var(--text-faint);border-top:0.5px solid var(--border);background:var(--bg-muted);}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:0.5px solid var(--border);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-size:13px;font-weight:700;width:24px;text-align:center;color:var(--text-faint);}
+.lb-rank.gold{color:#d97706;}.lb-rank.silver{color:#6b7280;}.lb-rank.bronze{color:#92400e;}
+.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.lb-name{flex:1;font-size:14px;font-weight:500;color:var(--text);}
+.lb-bar-wrap{width:70px;height:5px;background:var(--bg-muted);border-radius:99px;overflow:hidden;}
+.lb-bar{height:100%;border-radius:99px;background:var(--green);}
+.lb-pts{font-size:14px;font-weight:700;min-width:46px;text-align:right;}
+.badges-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.badge{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text-muted);}
+.badge.earned{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+.badge.locked{opacity:.35;}
+.rules-card{border-radius:var(--r-xl);overflow:hidden;margin-bottom:1.25rem;border:2px solid var(--green);}
+.rules-title{background:linear-gradient(135deg,var(--green),var(--green-dark));padding:12px 18px;font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;}
+.rules-body{background:var(--bg-card);}
+.rr{display:flex;align-items:flex-start;gap:12px;padding:12px 18px;border-bottom:0.5px solid var(--border);}
+.rr:last-child{border-bottom:none;}
+.rr-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+.rt{font-size:13px;color:var(--text-muted);line-height:1.55;}
+.rt strong{color:var(--text);font-weight:700;}
+.empty-msg{padding:1.5rem;text-align:center;font-size:13px;color:var(--text-faint);}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:11px 22px;border-radius:var(--r-md);font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.2);}
+.toast.show{opacity:1;}
+.wed-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 9px;border-radius:99px;background:var(--amber-light);color:#92400e;font-weight:700;border:1px solid rgba(245,158,11,0.3);}
+.footer{text-align:center;font-size:11px;color:var(--text-faint);padding-top:.75rem;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;}
+.overlay.show{display:flex;}
+.modal{background:var(--bg-card);border-radius:var(--r-xl);padding:2rem;max-width:340px;width:90%;text-align:center;}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:.75rem;}
+.modal p{font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-btns button{padding:9px 20px;border-radius:var(--r-md);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;border:none;}
+.btn-cancel{background:var(--bg-muted);color:var(--text);}
+.btn-confirm{background:var(--red);color:#fff;}
 </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="header">
-    <div class="header-icon"><i class="ti ti-tool" style="font-size:22px;color:#1D9E75;"></i></div>
-    <div>
-      <div class="header-title">Kitchen crew tracker</div>
-      <div class="header-sub" id="week-label"></div>
+<div class="header">
+  <div class="header-icon"><i class="ti ti-tool" style="font-size:22px;color:#fff;"></i></div>
+  <div>
+    <div class="header-title">🍽️ Kitchen Crew Tracker</div>
+    <div class="header-sub" id="week-label"></div>
+  </div>
+</div>
+
+<div class="sync-bar">
+  <div class="sync-dot syncing" id="sync-dot"></div>
+  <span id="sync-label">Connecting to scoreboard...</span>
+  <button class="reset-btn" onclick="showResetModal()">⚠ SDM Reset</button>
+</div>
+
+<div class="grid">
+  <div class="stat"><div class="stat-label">Total Points</div><div class="stat-val green" id="total-pts">—</div></div>
+  <div class="stat"><div class="stat-label">Cycles Started</div><div class="stat-val" id="loads-started">—</div></div>
+  <div class="stat"><div class="stat-label">Items Unloaded</div><div class="stat-val" id="unloads-done">—</div></div>
+  <div class="stat"><div class="stat-label">Microwaves</div><div class="stat-val" id="microwaves-done">—</div></div>
+  <div class="stat"><div class="stat-label">Coffee Actions</div><div class="stat-val" id="coffee-done">—</div></div>
+  <div class="stat"><div class="stat-label">Soap Reports</div><div class="stat-val" id="soap-done">—</div></div>
+</div>
+
+<div class="ni-wrap">
+  <label for="name-input"><i class="ti ti-user" style="font-size:16px;vertical-align:-2px;margin-right:4px;color:var(--green);"></i>Logging as:</label>
+  <input class="ni" id="name-input" type="text" placeholder="Type your name…" maxlength="30" autocomplete="off"/>
+</div>
+
+<div class="sec">Log an action <span id="wed-indicator"></span></div>
+<div class="actions" id="action-buttons">
+  <button class="abtn g" onclick="logAction('loaded',2)"><i class="ti ti-arrow-down-circle"></i><span>Loaded dishes</span><span class="pp g">+2 pts</span></button>
+  <button class="abtn b" onclick="logAction('started',3)"><i class="ti ti-player-play"></i><span>Started cycle</span><span class="pp b">+3 pts</span></button>
+  <button class="abtn t" onclick="logAction('unloaded',2)"><i class="ti ti-arrow-up-circle"></i><span>Unloaded items</span><span class="pp t">+2 pts</span></button>
+  <button class="abtn a" onclick="logAction('soap',1)"><i class="ti ti-bell"></i><span>Reported soap out</span><span class="pp a">+1 pt</span></button>
+  <button class="abtn p" onclick="logAction('microwave',4)" style="grid-column:span 2;"><i class="ti ti-flame"></i><span>Cleaned the microwave</span><span class="pp p">+4 pts</span></button>
+  <button class="abtn o" onclick="logAction('coffeefilter',4)" style="grid-column:span 2;"><i class="ti ti-coffee"></i><span>Cleaned coffee pot filter</span><span class="pp o">+4 pts ⭐</span></button>
+  <button class="abtn o" onclick="logAction('coffeebatch',4)" style="grid-column:span 2;"><i class="ti ti-coffee-off"></i><span>Started fresh coffee batch</span><span class="pp o">+4 pts ⭐</span></button>
+</div>
+
+<div class="sdm-callout">
+  <i class="ti ti-settings-2" style="font-size:20px;color:#2563eb;flex-shrink:0;"></i>
+  <div class="sdm-text">Out of soap? Raise a ticket with the <strong>Soap Dependency Manager (SDM)</strong> — your on-call engineer for critical consumable incidents. 🧼</div>
+  <span class="sdm-badge">SDM ON DUTY</span>
+</div>
+
+<div class="goal-wrap">
+  <label for="goal-input"><i class="ti ti-flag-3" style="font-size:16px;vertical-align:-2px;margin-right:4px;color:var(--green);"></i>Race goal:</label>
+  <input class="goal-input" id="goal-input" type="number" min="1" value="30"/>
+  <span style="font-size:13px;color:var(--text-muted);font-weight:500;">pts to win</span>
+  <span class="goal-hint">Edit anytime</span>
+</div>
+
+<div class="sec">🏁 The race</div>
+<div class="card" id="race-card">
+  <div class="race-header">
+    <div class="race-header-title"><i class="ti ti-tournament" style="font-size:15px;"></i> Points Race</div>
+    <div class="race-header-sub" id="race-header-sub">Finish line: 30 pts</div>
+  </div>
+  <div id="race-track"><div class="empty-msg">Connecting to scoreboard… 🚀</div></div>
+  <div class="race-footer" id="race-footer" style="display:none;"></div>
+</div>
+
+<div class="sec">🏆 Leaderboard</div>
+<div class="card" id="leaderboard"><div class="empty-msg">Connecting to scoreboard… 🌟</div></div>
+
+<div style="margin-bottom:1.25rem;">
+  <div class="sec">🎖️ Badges</div>
+  <div class="badges-row" id="badges-row"></div>
+</div>
+
+<div class="sec">📋 The rules</div>
+<div class="rules-card">
+  <div class="rules-title"><i class="ti ti-clipboard-list"></i> Kitchen Crew Code of Conduct</div>
+  <div class="rules-body">
+    <div class="rr"><div class="rr-icon" style="background:var(--green-light);"><i class="ti ti-arrow-down-circle" style="color:var(--green);"></i></div><div class="rt"><strong>Use it? Load it.</strong> Rinse your dishes and put them straight in — the sink is not a staging area.</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--blue-light);"><i class="ti ti-player-play" style="color:var(--blue);"></i></div><div class="rt"><strong>Full dishwasher? Start it.</strong> 10 seconds of your life, 3 points in the bank.</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--teal-light);"><i class="ti ti-arrow-up-circle" style="color:var(--teal);"></i></div><div class="rt"><strong>Clean dishwasher? Unload a few items.</strong> 30 seconds. 2 points. You don't have to do it all.</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--purple-light);"><i class="ti ti-flame" style="color:var(--purple);"></i></div><div class="rt"><strong>Nuked something messy? Clean the microwave.</strong> Hero move. 4 points + eternal respect.</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--orange-light);"><i class="ti ti-coffee" style="color:var(--orange);"></i></div><div class="rt"><strong>Dirty coffee pot filter? Clean it.</strong> Special task. 4 points. The team owes you a cup.</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--orange-light);"><i class="ti ti-coffee-off" style="color:var(--orange);"></i></div><div class="rt"><strong>Empty pot? Make a fresh batch.</strong> Critical infrastructure restored. 4 points.</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--amber-light);"><i class="ti ti-bell" style="color:var(--amber);"></i></div><div class="rt"><strong>Out of soap?</strong> Log it and ping the <strong>SDM</strong>. +1 point for filing the incident report. 🧼</div></div>
+    <div class="rr"><div class="rr-icon" style="background:var(--amber-light);"><i class="ti ti-bolt" style="color:var(--amber);"></i></div><div class="rt"><strong>Wednesday bonus ⚡</strong> All actions earn <strong>double points</strong> on our busiest day.</div></div>
+  </div>
+</div>
+
+<div class="footer">Kitchen Crew Tracker · Kleinfelder · The dishwasher is everyone's critical path 🏗️</div>
+</div>
+
+<!-- Reset Modal -->
+<div class="overlay" id="reset-overlay">
+  <div class="modal">
+    <h3>⚠️ SDM Admin Reset</h3>
+    <p>This will permanently delete ALL scores, badges and actions for everyone on the leaderboard. This cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="hideResetModal()">Cancel</button>
+      <button class="btn-confirm" onclick="confirmReset()">Reset everything</button>
     </div>
   </div>
-
-  <div class="sync-bar">
-    <div class="sync-dot" id="sync-dot"></div>
-    <span id="sync-label">Connecting...</span>
-    <button class="reset-btn" onclick="confirmReset()">Reset all scores</button>
-  </div>
-
-  <div class="grid">
-    <div class="stat"><div class="stat-label">Total points this week</div><div class="stat-val green" id="total-pts">—</div></div>
-    <div class="stat"><div class="stat-label">Loads started</div><div class="stat-val" id="loads-started">—</div></div>
-    <div class="stat"><div class="stat-label">Unloads done</div><div class="stat-val" id="unloads-done">—</div></div>
-    <div class="stat"><div class="stat-label">Microwaves cleaned</div><div class="stat-val" id="microwaves-done">—</div></div>
-  </div>
-
-  <div class="ni-wrap">
-    <label for="name-input"><i class="ti ti-user" style="font-size:16px;vertical-align:-2px;margin-right:4px;"></i>Logging as:</label>
-    <input class="ni" id="name-input" type="text" placeholder="Type your name…" maxlength="30" autocomplete="off"/>
-  </div>
-
-  <div class="sec">Log an action <span id="wed-indicator"></span></div>
-  <div class="actions" id="action-buttons">
-    <button class="abtn" onclick="logAction('loaded',2)"><i class="ti ti-arrow-down-circle"></i>Loaded dishes<span class="pp">+2 pts</span></button>
-    <button class="abtn" onclick="logAction('started',3)"><i class="ti ti-player-play"></i>Started cycle<span class="pp">+3 pts</span></button>
-    <button class="abtn" onclick="logAction('unloaded',2)"><i class="ti ti-arrow-up-circle"></i>Unloaded items<span class="pp">+2 pts</span></button>
-    <button class="abtn soap" onclick="logAction('soap',1)"><i class="ti ti-bell"></i>Reported soap out<span class="pp">+1 pt</span></button>
-    <button class="abtn purple" onclick="logAction('microwave',4)" style="grid-column:span 2;"><i class="ti ti-flame"></i>Cleaned the microwave<span class="pp">+4 pts</span></button>
-    <button class="abtn" onclick="logAction('coffeefilter',4)" style="grid-column:span 2;border-color:rgba(180,83,9,0.35);background:linear-gradient(135deg,#fff,#fff7ed);"><i class="ti ti-coffee" style="color:#b45309;font-size:17px;"></i>Cleaned coffee pot filter<span class="pp" style="background:#fff7ed;color:#92400e;border:1px solid rgba(180,83,9,0.2);">+4 pts ⭐</span></button>
-    <button class="abtn" onclick="logAction('coffeebatch',4)" style="grid-column:span 2;border-color:rgba(180,83,9,0.35);background:linear-gradient(135deg,#fff,#fef3c7);"><i class="ti ti-coffee-off" style="color:#b45309;font-size:17px;"></i>Started fresh coffee batch<span class="pp" style="background:#fef3c7;color:#92400e;border:1px solid rgba(180,83,9,0.2);">+4 pts ⭐</span></button>
-  </div>
-
-  <div class="sdm-callout">
-    <i class="ti ti-settings" style="font-size:18px;color:#185FA5;flex-shrink:0;"></i>
-    <div class="sdm-text">Out of soap? Raise a ticket with the <strong>Soap Dependency Manager (SDM)</strong> — your on-call engineer for critical consumable incidents.</div>
-    <span class="sdm-badge">SDM on duty</span>
-  </div>
-
-  <div class="goal-wrap">
-    <label for="goal-input"><i class="ti ti-flag" style="font-size:16px;vertical-align:-2px;margin-right:4px;"></i>Race goal:</label>
-    <input class="goal-input" id="goal-input" type="number" min="1" value="30"/>
-    <span style="font-size:13px;color:var(--text-secondary);">pts to win</span>
-    <span class="goal-hint">Edit anytime</span>
-  </div>
-
-  <div class="sec">The race</div>
-  <div class="card" id="race-track"><div class="empty-msg">Loading race data...</div></div>
-
-  <div class="sec">Leaderboard</div>
-  <div class="card" id="leaderboard"><div class="empty-msg">Loading scores...</div></div>
-
-  <div style="margin-bottom:1.5rem;">
-    <div class="sec">Badges</div>
-    <div class="badges-row" id="badges-row"></div>
-  </div>
-
-  <div class="sec">The rules</div>
-  <div class="rules-card">
-    <div class="rr"><i class="ti ti-check" style="font-size:16px;color:#1D9E75;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Use it? Load it.</strong> Rinse and put your dishes in — don't leave them in the sink.</div></div>
-    <div class="rr"><i class="ti ti-check" style="font-size:16px;color:#1D9E75;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Full dishwasher?</strong> Start it. Takes 10 seconds, earns 3 points.</div></div>
-    <div class="rr"><i class="ti ti-check" style="font-size:16px;color:#1D9E75;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Clean dishwasher?</strong> Grab a few items and unload. 30 seconds, 2 points.</div></div>
-    <div class="rr"><i class="ti ti-flame" style="font-size:16px;color:#534AB7;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Cleaned the microwave?</strong> Big deal — 4 points and major kudos.</div></div>
-    <div class="rr"><i class="ti ti-coffee" style="font-size:16px;color:#b45309;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Cleaned the coffee pot filter?</strong> That's a special one — 4 points and the whole team owes you a cup. ⭐</div></div>
-    <div class="rr"><i class="ti ti-coffee-off" style="font-size:16px;color:#b45309;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Started a fresh coffee batch?</strong> Life-saving move — 4 points and instant hero status. ⭐</div></div>
-    <div class="rr"><i class="ti ti-check" style="font-size:16px;color:#1D9E75;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Out of soap?</strong> Log it and ping the <strong>SDM</strong>. +1 point for filing the incident report.</div></div>
-    <div class="rr"><i class="ti ti-info-circle" style="font-size:16px;color:#378ADD;flex-shrink:0;margin-top:1px;"></i><div class="rt"><strong>Wednesday bonus:</strong> All actions earn double points on the busiest day.</div></div>
-  </div>
-
-  <div class="footer">Kitchen Crew Tracker · scores sync across all devices</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -213,180 +245,224 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbx2O-GxGSL2PWLMy1G4msfec5-DZMqXfVk_uCZoll44ojJiOu4XqEt--nureBuOIJ-f/exec';
 
 const COLORS = [
-  {bg:'#E1F5EE',color:'#085041'},{bg:'#EEEDFE',color:'#26215C'},
-  {bg:'#FAEEDA',color:'#412402'},{bg:'#FAECE7',color:'#4A1B0C'},
-  {bg:'#E6F1FB',color:'#042C53'},{bg:'#EAF3DE',color:'#173404'},
-  {bg:'#FBEAF0',color:'#4B1528'},{bg:'#FCEBEB',color:'#501313'},
+  {bg:'#d6f5eb',color:'#065f46'},{bg:'#ede9fe',color:'#4c1d95'},
+  {bg:'#fef3c7',color:'#78350f'},{bg:'#fce7f3',color:'#831843'},
+  {bg:'#dbeafe',color:'#1e3a8a'},{bg:'#ccfbf1',color:'#134e4a'},
+  {bg:'#fee2e2',color:'#7f1d1d'},{bg:'#ffedd5',color:'#7c2d12'},
+  {bg:'#f0fdf4',color:'#14532d'},{bg:'#fdf4ff',color:'#581c87'},
 ];
 
 const DEFAULT_STATE = {
-  scores: {}, colorMap: {}, colorIndex: 0,
-  actions: {loaded:0, started:0, unloaded:0, soap:0, microwave:0, coffeefilter:0, coffeebatch:0},
-  badges: [], goal: 30
+  scores:{}, colorMap:{}, colorIndex:0,
+  actions:{loaded:0,started:0,unloaded:0,soap:0,microwave:0,coffeefilter:0,coffeebatch:0},
+  badges:[], goal:30
 };
 
 let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 let saving = false;
+let refreshTimer = null;
 
+// ─── Week label ───────────────────────────────────────────────
 function getWeekLabel() {
-  const now = new Date();
-  const day = now.getDay();
-  const diffToMon = day === 0 ? -6 : 1 - day;
-  const mon = new Date(now); mon.setDate(now.getDate() + diffToMon);
-  const fri = new Date(mon); fri.setDate(mon.getDate() + 4);
-  const fmt = d => d.toLocaleDateString('en-CA', {month:'short', day:'numeric'});
-  return `Week of ${fmt(mon)} – ${fmt(fri)}, ${fri.getFullYear()} · Wednesday is peak day`;
+  const now = new Date(), day = now.getDay();
+  const mon = new Date(now); mon.setDate(now.getDate() + (day===0?-6:1-day));
+  const fri = new Date(mon); fri.setDate(mon.getDate()+4);
+  const fmt = d => d.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+  return `Week of ${fmt(mon)} – ${fmt(fri)}, ${fri.getFullYear()} · Wednesday is peak day ⚡`;
 }
-
-function isWednesday() { return new Date().getDay() === 3; }
-
-function getColor(name) {
-  if (!state.colorMap[name]) {
-    state.colorMap[name] = COLORS[state.colorIndex % COLORS.length];
+function isWednesday(){ return new Date().getDay()===3; }
+function getColor(name){
+  if(!state.colorMap[name]){
+    state.colorMap[name]=COLORS[state.colorIndex%COLORS.length];
     state.colorIndex++;
   }
   return state.colorMap[name];
 }
-
-function getGoal() {
-  return Math.max(1, parseInt(document.getElementById('goal-input').value) || 30);
+function getGoal(){ return Math.max(1,parseInt(document.getElementById('goal-input').value)||30); }
+function setSyncStatus(s,label){
+  document.getElementById('sync-dot').className='sync-dot '+s;
+  document.getElementById('sync-label').textContent=label;
 }
 
-function setSyncStatus(status, label) {
-  const dot = document.getElementById('sync-dot');
-  const lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + status;
-  lbl.textContent = label;
-}
-
-// Use JSONP to load (bypasses CORS completely)
-function loadFromBin() {
-  setSyncStatus('syncing', 'Syncing...');
-  const cbName = 'gasCallback_' + Date.now();
+// ─── LOAD via JSONP ───────────────────────────────────────────
+function loadScores(silent) {
+  if(!silent) setSyncStatus('syncing','Loading scores...');
+  const cb = 'cb_'+Date.now();
   const script = document.createElement('script');
-  const timeout = setTimeout(() => {
-    script.remove();
-    delete window[cbName];
-    setSyncStatus('error', 'Sync timed out — scores preserved locally');
-  }, 8000);
+  const timer = setTimeout(()=>{
+    script.remove(); delete window[cb];
+    if(!silent) setSyncStatus('error','Connection timed out — retrying in 30s');
+  }, 10000);
 
-  window[cbName] = function(data) {
-    clearTimeout(timeout);
-    script.remove();
-    delete window[cbName];
+  window[cb] = function(data) {
+    clearTimeout(timer); script.remove(); delete window[cb];
     try {
-      // Safety check — only update if response has valid structure
-      if (!data || typeof data !== 'object') throw new Error('Bad data');
-      // Never overwrite with empty scores if we already have some
-      const hasScores = Object.keys(state.scores).length > 0;
-      const incomingHasScores = data.scores && Object.keys(data.scores).length > 0;
-      if (hasScores && !incomingHasScores) {
-        setSyncStatus('error', 'Remote empty — keeping local scores');
-        return;
-      }
-      const merged = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), data);
-      merged.actions = Object.assign({}, DEFAULT_STATE.actions, data.actions || {});
+      if(!data || typeof data !== 'object') throw new Error('Bad data');
+      // Safely merge — never blow away scores with empty data
+      const incoming = data;
+      const merged = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      Object.assign(merged, incoming);
+      merged.actions = Object.assign({}, DEFAULT_STATE.actions, incoming.actions||{});
+      merged.scores = incoming.scores || {};
+      merged.badges = incoming.badges || [];
+      merged.colorMap = incoming.colorMap || {};
+      merged.colorIndex = incoming.colorIndex || 0;
       state = merged;
       document.getElementById('goal-input').value = state.goal || 30;
-      setSyncStatus('synced', 'Synced · ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+      setSyncStatus('synced','Live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
       render();
     } catch(e) {
-      setSyncStatus('error', 'Bad response — scores preserved');
+      setSyncStatus('error','Bad response from server');
     }
   };
 
-  script.src = GAS_URL + '?callback=' + cbName + '&t=' + Date.now();
+  script.onerror = () => {
+    clearTimeout(timer); script.remove(); delete window[cb];
+    setSyncStatus('error','Could not reach server — retrying in 30s');
+  };
+
+  script.src = GAS_URL + '?callback='+cb+'&nocache='+Date.now();
   document.head.appendChild(script);
 }
 
-async function saveToBin() {
-  if (saving) return;
+// ─── SAVE via no-cors POST ────────────────────────────────────
+async function saveScores() {
+  if(saving) return;
   saving = true;
-  setSyncStatus('syncing', 'Saving...');
+  setSyncStatus('syncing','Saving...');
   try {
     state.goal = getGoal();
-    // Use no-cors mode — we won't get a response body but the POST goes through
     await fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
       body: JSON.stringify(state)
     });
-    // Save succeeded (no-cors won't throw on success)
-    // Do a fresh load after short delay to confirm
-    setTimeout(() => loadFromBin(), 1500);
-    setSyncStatus('synced', 'Saved · ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+    // no-cors means we can't read the response — wait then reload to confirm
+    setSyncStatus('syncing','Verifying save...');
+    setTimeout(()=> loadScores(false), 2000);
   } catch(e) {
-    setSyncStatus('error', 'Save failed — try again');
+    setSyncStatus('error','Save failed — please try again');
   }
   saving = false;
 }
 
-function setButtonsDisabled(disabled) {
-  document.querySelectorAll('#action-buttons .abtn').forEach(b => b.disabled = disabled);
+// ─── Auto-refresh every 30s (silent) ─────────────────────────
+function scheduleRefresh() {
+  clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(()=>{ loadScores(true); scheduleRefresh(); }, 30000);
 }
 
+// ─── Log action ───────────────────────────────────────────────
 async function logAction(type, pts) {
   const input = document.getElementById('name-input');
   const name = input.value.trim();
-  if (!name) {
+  if(!name){
     input.focus();
-    input.style.outline = '2px solid #D85A30';
-    setTimeout(() => input.style.outline = '', 1200);
-    showToast('Please enter your name first!');
+    input.style.outline='2px solid var(--red)';
+    setTimeout(()=>input.style.outline='',1400);
+    showToast('👋 Enter your name first!');
     return;
   }
-  const mult = isWednesday() ? 2 : 1;
-  const earned = pts * mult;
-  state.scores[name] = (state.scores[name] || 0) + earned;
+  if(saving){ showToast('⏳ Still saving previous action, please wait…'); return; }
+
+  const mult = isWednesday()?2:1;
+  const earned = pts*mult;
+  state.scores[name] = (state.scores[name]||0) + earned;
+  if(state.actions[type]===undefined) state.actions[type]=0;
   state.actions[type]++;
-  checkBadges(name, type);
+  checkBadges(name,type);
   render();
-  showToast(isWednesday() ? `${name} +${earned} pts (Wednesday double!)` : `${name} +${earned} pts — nice one!`);
-  if (state.scores[name] >= getGoal()) setTimeout(() => showToast(`${name} crossed the finish line! 🏆`), 2400);
+  showToast(isWednesday()
+    ? `${name} +${earned} pts ⚡ Wednesday double!`
+    : `${name} +${earned} pts — nice one! 🎉`);
+  if(state.scores[name]>=getGoal())
+    setTimeout(()=>showToast(`🏆 ${name} crossed the finish line!`),2600);
+
   setButtonsDisabled(true);
-  await saveToBin();
+  await saveScores();
   setButtonsDisabled(false);
 }
 
-function checkBadges(name, type) {
-  if (type==='loaded' && !state.badges.includes('first-cycle')) state.badges.push('first-cycle');
-  if (type==='soap' && !state.badges.includes('soap-hero')) state.badges.push('soap-hero');
-  if (state.actions.unloaded >= 3 && !state.badges.includes('quick-turnaround')) state.badges.push('quick-turnaround');
-  if (type==='microwave' && !state.badges.includes('microwave-hero')) state.badges.push('microwave-hero');
-  if ((type==='coffeefilter'||type==='coffeebatch') && !state.badges.includes('barista')) state.badges.push('barista');
-  if (Math.max(0, ...Object.values(state.scores)) >= getGoal() && !state.badges.includes('month-champ')) state.badges.push('month-champ');
+function setButtonsDisabled(d){
+  document.querySelectorAll('#action-buttons .abtn').forEach(b=>b.disabled=d);
 }
 
-function confirmReset() {
-  if (confirm('Reset ALL scores, actions and badges for everyone? This cannot be undone.')) {
-    state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-    render();
-    saveToBin();
-    showToast('All scores have been reset.');
-  }
+// ─── Badges ───────────────────────────────────────────────────
+function checkBadges(name,type){
+  const s = state;
+  if(type==='loaded' && !s.badges.includes('first-cycle')) s.badges.push('first-cycle');
+  if(type==='soap' && !s.badges.includes('soap-hero')) s.badges.push('soap-hero');
+  if((s.actions.unloaded||0)>=3 && !s.badges.includes('quick-turnaround')) s.badges.push('quick-turnaround');
+  if(type==='microwave' && !s.badges.includes('microwave-hero')) s.badges.push('microwave-hero');
+  if((type==='coffeefilter'||type==='coffeebatch') && !s.badges.includes('barista')) s.badges.push('barista');
+  if(Math.max(0,...Object.values(s.scores))>=getGoal() && !s.badges.includes('month-champ')) s.badges.push('month-champ');
 }
 
-function render() {
-  const sorted = Object.keys(state.scores).sort((a,b) => state.scores[b] - state.scores[a]);
-  const max = sorted.length ? Math.max(1, state.scores[sorted[0]]) : 1;
-  const total = Object.values(state.scores).reduce((a,b) => a+b, 0);
+// ─── Reset (SDM only) ─────────────────────────────────────────
+function showResetModal(){ document.getElementById('reset-overlay').classList.add('show'); }
+function hideResetModal(){ document.getElementById('reset-overlay').classList.remove('show'); }
+async function confirmReset(){
+  hideResetModal();
+  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  state.goal = getGoal();
+  render();
+  showToast('🔄 All scores reset by SDM');
+  await saveScores();
+}
+
+// ─── Render ───────────────────────────────────────────────────
+function render(){
+  const sorted = Object.keys(state.scores).sort((a,b)=>state.scores[b]-state.scores[a]);
+  const max = sorted.length ? Math.max(1,state.scores[sorted[0]]) : 1;
+  const total = Object.values(state.scores).reduce((a,b)=>a+b,0);
   const goal = getGoal();
 
   document.getElementById('total-pts').textContent = total;
-  document.getElementById('loads-started').textContent = state.actions.loaded;
-  document.getElementById('unloads-done').textContent = state.actions.unloaded;
-  document.getElementById('microwaves-done').textContent = state.actions.microwave;
+  document.getElementById('loads-started').textContent = state.actions.started||0;
+  document.getElementById('unloads-done').textContent = state.actions.unloaded||0;
+  document.getElementById('microwaves-done').textContent = state.actions.microwave||0;
+  document.getElementById('coffee-done').textContent = (state.actions.coffeefilter||0)+(state.actions.coffeebatch||0);
+  document.getElementById('soap-done').textContent = state.actions.soap||0;
 
   document.getElementById('wed-indicator').innerHTML = isWednesday()
-    ? '<span class="wed-badge"><i class="ti ti-bolt" style="font-size:11px;"></i>2x Wednesday!</span>' : '';
+    ? '<span class="wed-badge">⚡ 2x Wednesday!</span>' : '';
+  document.getElementById('race-header-sub').textContent = `Finish line: ${goal} pts`;
 
-  const ranks = ['gold','silver','bronze'];
-  const lb = document.getElementById('leaderboard');
-  if (!sorted.length) {
-    lb.innerHTML = '<div class="empty-msg">No actions logged yet — be the first!</div>';
+  // RACE
+  const rt = document.getElementById('race-track');
+  const rf = document.getElementById('race-footer');
+  if(!sorted.length){
+    rt.innerHTML='<div class="empty-msg">No scores yet — be the first to log an action! 🚀</div>';
+    rf.style.display='none';
   } else {
-    lb.innerHTML = sorted.map((name,i) => {
+    rt.innerHTML = sorted.map(name=>{
+      const score = state.scores[name];
+      const c = getColor(name);
+      const pct = Math.min(100,Math.round((score/goal)*100));
+      const done = score>=goal;
+      return `<div class="race-row">
+        <div class="race-name" title="${name}">${name}</div>
+        <div class="race-lane">
+          <div class="race-runner" style="width:${Math.max(pct,10)}%;background:${c.bg};">
+            <span class="race-label" style="color:${c.color};">${name.slice(0,2).toUpperCase()}</span>
+          </div>
+          ${done?'<span style="position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:14px;">🏁</span>':''}
+        </div>
+        <div class="race-pts" style="color:${done?'var(--green)':''}">${score}${done?' 🏆':''}</div>
+      </div>`;
+    }).join('');
+    rf.style.display='block';
+    rf.textContent=`🏁 Finish line: ${goal} pts`;
+  }
+
+  // LEADERBOARD
+  const lb = document.getElementById('leaderboard');
+  const ranks=['gold','silver','bronze'];
+  if(!sorted.length){
+    lb.innerHTML='<div class="empty-msg">No scores yet — log your first action! 🌟</div>';
+  } else {
+    lb.innerHTML = sorted.map((name,i)=>{
       const score = state.scores[name];
       const c = getColor(name);
       const pct = Math.round((score/max)*100);
@@ -395,57 +471,36 @@ function render() {
         <div class="av" style="background:${c.bg};color:${c.color};">${name.slice(0,2).toUpperCase()}</div>
         <div class="lb-name">${name}</div>
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:${pct}%"></div></div>
-        <div class="lb-pts">${score} pts</div>
+        <div class="lb-pts" style="color:${score>=goal?'var(--green)':''}">${score}</div>
       </div>`;
     }).join('');
   }
 
-  const rt = document.getElementById('race-track');
-  if (!sorted.length) {
-    rt.innerHTML = '<div class="empty-msg">Log your first action to start the race!</div>';
-  } else {
-    rt.innerHTML = sorted.map(name => {
-      const score = state.scores[name];
-      const c = getColor(name);
-      const pct = Math.min(100, Math.round((score/goal)*100));
-      const finished = score >= goal;
-      return `<div class="race-row">
-        <div class="race-name" title="${name}">${name}</div>
-        <div class="race-lane">
-          <div class="race-runner" style="width:${Math.max(pct,8)}%;background:${c.bg};">
-            <span class="race-runner-label" style="color:${c.color};">${name.slice(0,2).toUpperCase()}</span>
-          </div>
-          ${finished ? '<span style="position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:13px;">🏁</span>' : ''}
-        </div>
-        <div class="race-pts" style="color:${finished?'#0F6E56':''}">${score}${finished?' 🏆':''}</div>
-      </div>`;
-    }).join('') + `<div class="race-footer">Finish line: ${goal} pts</div>`;
-  }
-
-  const badgeDefs = [
-    {id:'first-cycle', icon:'ti-trophy', label:'First cycle'},
-    {id:'soap-hero', icon:'ti-droplet', label:'Soap hero'},
-    {id:'quick-turnaround', icon:'ti-bolt', label:'Quick turnaround'},
-    {id:'microwave-hero', icon:'ti-flame', label:'Microwave hero'},
-    {id:'barista', icon:'ti-coffee', label:'Office barista'},
-    {id:'month-champ', icon:'ti-star', label:'Champion of the month'},
+  // BADGES
+  const badgeDefs=[
+    {id:'first-cycle',icon:'ti-trophy',label:'First cycle'},
+    {id:'soap-hero',icon:'ti-droplet',label:'Soap hero'},
+    {id:'quick-turnaround',icon:'ti-bolt',label:'Quick turnaround'},
+    {id:'microwave-hero',icon:'ti-flame',label:'Microwave hero'},
+    {id:'barista',icon:'ti-coffee',label:'Office barista'},
+    {id:'month-champ',icon:'ti-star',label:'Champion of the month'},
   ];
-  document.getElementById('badges-row').innerHTML = badgeDefs.map(b =>
+  document.getElementById('badges-row').innerHTML = badgeDefs.map(b=>
     `<div class="badge ${state.badges.includes(b.id)?'earned':'locked'}"><i class="ti ${b.icon}"></i>${b.label}</div>`
   ).join('');
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-document.getElementById('goal-input').addEventListener('change', () => { render(); saveToBin(); });
+// ─── Init ─────────────────────────────────────────────────────
+document.getElementById('goal-input').addEventListener('change',()=>{render();saveScores();});
 document.getElementById('week-label').textContent = getWeekLabel();
-
-loadFromBin();
-setInterval(loadFromBin, 30000);
+loadScores(false);
+scheduleRefresh();
 </script>
 </body>
 </html>
