@@ -125,13 +125,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .toast.show{opacity:1;}
 .wed-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 9px;border-radius:99px;background:var(--amber-light);color:#92400e;font-weight:700;border:1px solid rgba(245,158,11,0.3);}
 .footer{text-align:center;font-size:11px;color:var(--text-faint);padding-top:.75rem;}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;align-items:center;justify-content:center;}
 .overlay.show{display:flex;}
-.modal{background:var(--bg-card);border-radius:var(--r-xl);padding:2rem;max-width:340px;width:90%;text-align:center;}
+.modal{background:var(--bg-card);border-radius:var(--r-xl);padding:2rem;max-width:340px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
 .modal h3{font-size:18px;font-weight:700;margin-bottom:.75rem;}
-.modal p{font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.5;}
+.modal p{font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6;}
 .modal-btns{display:flex;gap:10px;justify-content:center;}
-.modal-btns button{padding:9px 20px;border-radius:var(--r-md);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;border:none;}
+.modal-btns button{padding:9px 22px;border-radius:var(--r-md);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;border:none;}
 .btn-cancel{background:var(--bg-muted);color:var(--text);}
 .btn-confirm{background:var(--red);color:#fff;}
 </style>
@@ -149,17 +149,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <div class="sync-bar">
   <div class="sync-dot syncing" id="sync-dot"></div>
-  <span id="sync-label">Connecting to scoreboard...</span>
+  <span id="sync-label">Loading scoreboard...</span>
   <button class="reset-btn" onclick="showResetModal()">⚠ SDM Reset</button>
 </div>
 
 <div class="grid">
   <div class="stat"><div class="stat-label">Total Points</div><div class="stat-val green" id="total-pts">—</div></div>
-  <div class="stat"><div class="stat-label">Cycles Started</div><div class="stat-val" id="loads-started">—</div></div>
-  <div class="stat"><div class="stat-label">Items Unloaded</div><div class="stat-val" id="unloads-done">—</div></div>
-  <div class="stat"><div class="stat-label">Microwaves</div><div class="stat-val" id="microwaves-done">—</div></div>
-  <div class="stat"><div class="stat-label">Coffee Actions</div><div class="stat-val" id="coffee-done">—</div></div>
-  <div class="stat"><div class="stat-label">Soap Reports</div><div class="stat-val" id="soap-done">—</div></div>
+  <div class="stat"><div class="stat-label">Cycles Started</div><div class="stat-val" id="stat-started">—</div></div>
+  <div class="stat"><div class="stat-label">Items Unloaded</div><div class="stat-val" id="stat-unloaded">—</div></div>
+  <div class="stat"><div class="stat-label">Microwaves</div><div class="stat-val" id="stat-microwave">—</div></div>
+  <div class="stat"><div class="stat-label">Coffee Actions</div><div class="stat-val" id="stat-coffee">—</div></div>
+  <div class="stat"><div class="stat-label">Soap Reports</div><div class="stat-val" id="stat-soap">—</div></div>
 </div>
 
 <div class="ni-wrap">
@@ -192,17 +192,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div>
 
 <div class="sec">🏁 The race</div>
-<div class="card" id="race-card">
+<div class="card">
   <div class="race-header">
     <div class="race-header-title"><i class="ti ti-tournament" style="font-size:15px;"></i> Points Race</div>
     <div class="race-header-sub" id="race-header-sub">Finish line: 30 pts</div>
   </div>
-  <div id="race-track"><div class="empty-msg">Connecting to scoreboard… 🚀</div></div>
+  <div id="race-track"><div class="empty-msg">Loading race… 🚀</div></div>
   <div class="race-footer" id="race-footer" style="display:none;"></div>
 </div>
 
 <div class="sec">🏆 Leaderboard</div>
-<div class="card" id="leaderboard"><div class="empty-msg">Connecting to scoreboard… 🌟</div></div>
+<div class="card" id="leaderboard"><div class="empty-msg">Loading scores… 🌟</div></div>
 
 <div style="margin-bottom:1.25rem;">
   <div class="sec">🎖️ Badges</div>
@@ -227,11 +227,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="footer">Kitchen Crew Tracker · Kleinfelder · The dishwasher is everyone's critical path 🏗️</div>
 </div>
 
-<!-- Reset Modal -->
+<!-- SDM Reset Modal -->
 <div class="overlay" id="reset-overlay">
   <div class="modal">
     <h3>⚠️ SDM Admin Reset</h3>
-    <p>This will permanently delete ALL scores, badges and actions for everyone on the leaderboard. This cannot be undone.</p>
+    <p>This will permanently delete <strong>all scores, badges and actions</strong> for everyone. Only the SDM should do this. It cannot be undone.</p>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="hideResetModal()">Cancel</button>
       <button class="btn-confirm" onclick="confirmReset()">Reset everything</button>
@@ -242,7 +242,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="toast" id="toast"></div>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbx2O-GxGSL2PWLMy1G4msfec5-DZMqXfVk_uCZoll44ojJiOu4XqEt--nureBuOIJ-f/exec';
+const GAS = 'https://script.google.com/macros/s/AKfycbw6fFOPFc__pZm5GoSnthwqm92iVwVGfASJ1WYlkjCnKBBENfTRsBMwQJA6do31dJdF/exec';
 
 const COLORS = [
   {bg:'#d6f5eb',color:'#065f46'},{bg:'#ede9fe',color:'#4c1d95'},
@@ -252,25 +252,26 @@ const COLORS = [
   {bg:'#f0fdf4',color:'#14532d'},{bg:'#fdf4ff',color:'#581c87'},
 ];
 
-const DEFAULT_STATE = {
+const EMPTY = {
   scores:{}, colorMap:{}, colorIndex:0,
   actions:{loaded:0,started:0,unloaded:0,soap:0,microwave:0,coffeefilter:0,coffeebatch:0},
   badges:[], goal:30
 };
 
-let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-let saving = false;
+let state = JSON.parse(JSON.stringify(EMPTY));
+let busy = false;
 let refreshTimer = null;
 
-// ─── Week label ───────────────────────────────────────────────
-function getWeekLabel() {
-  const now = new Date(), day = now.getDay();
-  const mon = new Date(now); mon.setDate(now.getDate() + (day===0?-6:1-day));
-  const fri = new Date(mon); fri.setDate(mon.getDate()+4);
-  const fmt = d => d.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+// ── Helpers ──────────────────────────────────────────────────
+function getWeekLabel(){
+  const now=new Date(), day=now.getDay();
+  const mon=new Date(now); mon.setDate(now.getDate()+(day===0?-6:1-day));
+  const fri=new Date(mon); fri.setDate(mon.getDate()+4);
+  const fmt=d=>d.toLocaleDateString('en-CA',{month:'short',day:'numeric'});
   return `Week of ${fmt(mon)} – ${fmt(fri)}, ${fri.getFullYear()} · Wednesday is peak day ⚡`;
 }
-function isWednesday(){ return new Date().getDay()===3; }
+function isWed(){ return new Date().getDay()===3; }
+function getGoal(){ return Math.max(1,parseInt(document.getElementById('goal-input').value)||30); }
 function getColor(name){
   if(!state.colorMap[name]){
     state.colorMap[name]=COLORS[state.colorIndex%COLORS.length];
@@ -278,85 +279,100 @@ function getColor(name){
   }
   return state.colorMap[name];
 }
-function getGoal(){ return Math.max(1,parseInt(document.getElementById('goal-input').value)||30); }
-function setSyncStatus(s,label){
+function setSyncStatus(s,txt){
   document.getElementById('sync-dot').className='sync-dot '+s;
-  document.getElementById('sync-label').textContent=label;
+  document.getElementById('sync-label').textContent=txt;
+}
+function setButtonsDisabled(d){
+  document.querySelectorAll('#action-buttons .abtn').forEach(b=>b.disabled=d);
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ─── LOAD via JSONP ───────────────────────────────────────────
-function loadScores(silent) {
+// ── JSONP call (works for both load & save) ──────────────────
+function jsonp(params){
+  return new Promise((resolve, reject)=>{
+    const cb='cb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>{
+      script.remove(); delete window[cb];
+      reject(new Error('Timeout'));
+    }, 12000);
+
+    window[cb]=function(data){
+      clearTimeout(timer); script.remove(); delete window[cb];
+      resolve(data);
+    };
+
+    script.onerror=()=>{
+      clearTimeout(timer); script.remove(); delete window[cb];
+      reject(new Error('Script error'));
+    };
+
+    const qs = Object.entries({...params, callback:cb})
+      .map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
+    script.src = GAS+'?'+qs+'&t='+Date.now();
+    document.head.appendChild(script);
+  });
+}
+
+// ── Load scores from Sheet ────────────────────────────────────
+async function loadScores(silent){
   if(!silent) setSyncStatus('syncing','Loading scores...');
-  const cb = 'cb_'+Date.now();
-  const script = document.createElement('script');
-  const timer = setTimeout(()=>{
-    script.remove(); delete window[cb];
-    if(!silent) setSyncStatus('error','Connection timed out — retrying in 30s');
-  }, 10000);
-
-  window[cb] = function(data) {
-    clearTimeout(timer); script.remove(); delete window[cb];
-    try {
-      if(!data || typeof data !== 'object') throw new Error('Bad data');
-      // Safely merge — never blow away scores with empty data
-      const incoming = data;
-      const merged = JSON.parse(JSON.stringify(DEFAULT_STATE));
-      Object.assign(merged, incoming);
-      merged.actions = Object.assign({}, DEFAULT_STATE.actions, incoming.actions||{});
-      merged.scores = incoming.scores || {};
-      merged.badges = incoming.badges || [];
-      merged.colorMap = incoming.colorMap || {};
-      merged.colorIndex = incoming.colorIndex || 0;
-      state = merged;
-      document.getElementById('goal-input').value = state.goal || 30;
-      setSyncStatus('synced','Live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
-      render();
-    } catch(e) {
-      setSyncStatus('error','Bad response from server');
-    }
-  };
-
-  script.onerror = () => {
-    clearTimeout(timer); script.remove(); delete window[cb];
-    setSyncStatus('error','Could not reach server — retrying in 30s');
-  };
-
-  script.src = GAS_URL + '?callback='+cb+'&nocache='+Date.now();
-  document.head.appendChild(script);
+  try {
+    const data = await jsonp({action:'load'});
+    if(!data || typeof data!=='object') throw new Error('Bad data');
+    // Merge carefully — never replace populated scores with empty
+    const merged = JSON.parse(JSON.stringify(EMPTY));
+    Object.assign(merged, data);
+    merged.actions = Object.assign({}, EMPTY.actions, data.actions||{});
+    merged.scores  = (data.scores && Object.keys(data.scores).length>0)
+                     ? data.scores
+                     : (Object.keys(state.scores).length>0 ? state.scores : {});
+    merged.badges    = data.badges    || state.badges    || [];
+    merged.colorMap  = data.colorMap  || state.colorMap  || {};
+    merged.colorIndex= data.colorIndex!==undefined ? data.colorIndex : state.colorIndex;
+    merged.goal      = data.goal      || state.goal      || 30;
+    state = merged;
+    document.getElementById('goal-input').value = state.goal;
+    setSyncStatus('synced','Live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+    render();
+  } catch(e){
+    setSyncStatus('error','Could not reach server — retrying...');
+    if(!silent) setTimeout(()=>loadScores(false), 5000);
+  }
 }
 
-// ─── SAVE via no-cors POST ────────────────────────────────────
-async function saveScores() {
-  if(saving) return;
-  saving = true;
+// ── Save scores to Sheet via JSONP GET ────────────────────────
+async function saveScores(){
+  if(busy) return;
+  busy=true;
   setSyncStatus('syncing','Saving...');
   try {
     state.goal = getGoal();
-    await fetch(GAS_URL, {
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify(state)
-    });
-    // no-cors means we can't read the response — wait then reload to confirm
-    setSyncStatus('syncing','Verifying save...');
-    setTimeout(()=> loadScores(false), 2000);
-  } catch(e) {
-    setSyncStatus('error','Save failed — please try again');
+    const payload = JSON.stringify(state);
+    const result = await jsonp({action:'save', data: payload});
+    if(result && result.status==='ok'){
+      setSyncStatus('synced','Saved · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+      // Reload after save to confirm Sheet has the data
+      setTimeout(()=>loadScores(true), 1500);
+    } else {
+      throw new Error(result && result.msg ? result.msg : 'Save failed');
+    }
+  } catch(e){
+    setSyncStatus('error','Save failed: '+e.message);
+    showToast('⚠️ Save failed — please try again');
   }
-  saving = false;
+  busy=false;
 }
 
-// ─── Auto-refresh every 30s (silent) ─────────────────────────
-function scheduleRefresh() {
-  clearTimeout(refreshTimer);
-  refreshTimer = setTimeout(()=>{ loadScores(true); scheduleRefresh(); }, 30000);
-}
-
-// ─── Log action ───────────────────────────────────────────────
-async function logAction(type, pts) {
-  const input = document.getElementById('name-input');
-  const name = input.value.trim();
+// ── Log an action ─────────────────────────────────────────────
+async function logAction(type, pts){
+  const input=document.getElementById('name-input');
+  const name=input.value.trim();
   if(!name){
     input.focus();
     input.style.outline='2px solid var(--red)';
@@ -364,83 +380,78 @@ async function logAction(type, pts) {
     showToast('👋 Enter your name first!');
     return;
   }
-  if(saving){ showToast('⏳ Still saving previous action, please wait…'); return; }
+  if(busy){ showToast('⏳ Still saving — please wait a moment'); return; }
 
-  const mult = isWednesday()?2:1;
-  const earned = pts*mult;
-  state.scores[name] = (state.scores[name]||0) + earned;
+  const mult=isWed()?2:1;
+  const earned=pts*mult;
+  state.scores[name]=(state.scores[name]||0)+earned;
   if(state.actions[type]===undefined) state.actions[type]=0;
   state.actions[type]++;
   checkBadges(name,type);
   render();
-  showToast(isWednesday()
+  showToast(isWed()
     ? `${name} +${earned} pts ⚡ Wednesday double!`
     : `${name} +${earned} pts — nice one! 🎉`);
   if(state.scores[name]>=getGoal())
-    setTimeout(()=>showToast(`🏆 ${name} crossed the finish line!`),2600);
+    setTimeout(()=>showToast(`🏆 ${name} crossed the finish line!`),2800);
 
   setButtonsDisabled(true);
   await saveScores();
   setButtonsDisabled(false);
 }
 
-function setButtonsDisabled(d){
-  document.querySelectorAll('#action-buttons .abtn').forEach(b=>b.disabled=d);
-}
-
-// ─── Badges ───────────────────────────────────────────────────
+// ── Badges ────────────────────────────────────────────────────
 function checkBadges(name,type){
-  const s = state;
-  if(type==='loaded' && !s.badges.includes('first-cycle')) s.badges.push('first-cycle');
-  if(type==='soap' && !s.badges.includes('soap-hero')) s.badges.push('soap-hero');
+  const s=state;
+  if(type==='loaded'       && !s.badges.includes('first-cycle'))      s.badges.push('first-cycle');
+  if(type==='soap'         && !s.badges.includes('soap-hero'))         s.badges.push('soap-hero');
   if((s.actions.unloaded||0)>=3 && !s.badges.includes('quick-turnaround')) s.badges.push('quick-turnaround');
-  if(type==='microwave' && !s.badges.includes('microwave-hero')) s.badges.push('microwave-hero');
+  if(type==='microwave'    && !s.badges.includes('microwave-hero'))    s.badges.push('microwave-hero');
   if((type==='coffeefilter'||type==='coffeebatch') && !s.badges.includes('barista')) s.badges.push('barista');
   if(Math.max(0,...Object.values(s.scores))>=getGoal() && !s.badges.includes('month-champ')) s.badges.push('month-champ');
 }
 
-// ─── Reset (SDM only) ─────────────────────────────────────────
+// ── Reset (SDM only) ──────────────────────────────────────────
 function showResetModal(){ document.getElementById('reset-overlay').classList.add('show'); }
 function hideResetModal(){ document.getElementById('reset-overlay').classList.remove('show'); }
 async function confirmReset(){
   hideResetModal();
-  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  state = JSON.parse(JSON.stringify(EMPTY));
   state.goal = getGoal();
   render();
   showToast('🔄 All scores reset by SDM');
   await saveScores();
 }
 
-// ─── Render ───────────────────────────────────────────────────
+// ── Render ────────────────────────────────────────────────────
 function render(){
-  const sorted = Object.keys(state.scores).sort((a,b)=>state.scores[b]-state.scores[a]);
-  const max = sorted.length ? Math.max(1,state.scores[sorted[0]]) : 1;
-  const total = Object.values(state.scores).reduce((a,b)=>a+b,0);
-  const goal = getGoal();
+  const sorted=Object.keys(state.scores).sort((a,b)=>state.scores[b]-state.scores[a]);
+  const max=sorted.length?Math.max(1,state.scores[sorted[0]]):1;
+  const total=Object.values(state.scores).reduce((a,b)=>a+b,0);
+  const goal=getGoal();
 
-  document.getElementById('total-pts').textContent = total;
-  document.getElementById('loads-started').textContent = state.actions.started||0;
-  document.getElementById('unloads-done').textContent = state.actions.unloaded||0;
-  document.getElementById('microwaves-done').textContent = state.actions.microwave||0;
-  document.getElementById('coffee-done').textContent = (state.actions.coffeefilter||0)+(state.actions.coffeebatch||0);
-  document.getElementById('soap-done').textContent = state.actions.soap||0;
-
-  document.getElementById('wed-indicator').innerHTML = isWednesday()
+  document.getElementById('total-pts').textContent       = total;
+  document.getElementById('stat-started').textContent    = state.actions.started||0;
+  document.getElementById('stat-unloaded').textContent   = state.actions.unloaded||0;
+  document.getElementById('stat-microwave').textContent  = state.actions.microwave||0;
+  document.getElementById('stat-coffee').textContent     = (state.actions.coffeefilter||0)+(state.actions.coffeebatch||0);
+  document.getElementById('stat-soap').textContent       = state.actions.soap||0;
+  document.getElementById('wed-indicator').innerHTML     = isWed()
     ? '<span class="wed-badge">⚡ 2x Wednesday!</span>' : '';
   document.getElementById('race-header-sub').textContent = `Finish line: ${goal} pts`;
 
   // RACE
-  const rt = document.getElementById('race-track');
-  const rf = document.getElementById('race-footer');
+  const rt=document.getElementById('race-track');
+  const rf=document.getElementById('race-footer');
   if(!sorted.length){
     rt.innerHTML='<div class="empty-msg">No scores yet — be the first to log an action! 🚀</div>';
     rf.style.display='none';
   } else {
-    rt.innerHTML = sorted.map(name=>{
-      const score = state.scores[name];
-      const c = getColor(name);
-      const pct = Math.min(100,Math.round((score/goal)*100));
-      const done = score>=goal;
+    rt.innerHTML=sorted.map(name=>{
+      const score=state.scores[name];
+      const c=getColor(name);
+      const pct=Math.min(100,Math.round((score/goal)*100));
+      const done=score>=goal;
       return `<div class="race-row">
         <div class="race-name" title="${name}">${name}</div>
         <div class="race-lane">
@@ -457,15 +468,15 @@ function render(){
   }
 
   // LEADERBOARD
-  const lb = document.getElementById('leaderboard');
+  const lb=document.getElementById('leaderboard');
   const ranks=['gold','silver','bronze'];
   if(!sorted.length){
     lb.innerHTML='<div class="empty-msg">No scores yet — log your first action! 🌟</div>';
   } else {
-    lb.innerHTML = sorted.map((name,i)=>{
-      const score = state.scores[name];
-      const c = getColor(name);
-      const pct = Math.round((score/max)*100);
+    lb.innerHTML=sorted.map((name,i)=>{
+      const score=state.scores[name];
+      const c=getColor(name);
+      const pct=Math.round((score/max)*100);
       return `<div class="lb-row">
         <div class="lb-rank ${i<3?ranks[i]:''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)}</div>
         <div class="av" style="background:${c.bg};color:${c.color};">${name.slice(0,2).toUpperCase()}</div>
@@ -478,27 +489,27 @@ function render(){
 
   // BADGES
   const badgeDefs=[
-    {id:'first-cycle',icon:'ti-trophy',label:'First cycle'},
-    {id:'soap-hero',icon:'ti-droplet',label:'Soap hero'},
-    {id:'quick-turnaround',icon:'ti-bolt',label:'Quick turnaround'},
-    {id:'microwave-hero',icon:'ti-flame',label:'Microwave hero'},
-    {id:'barista',icon:'ti-coffee',label:'Office barista'},
-    {id:'month-champ',icon:'ti-star',label:'Champion of the month'},
+    {id:'first-cycle',      icon:'ti-trophy',  label:'First cycle'},
+    {id:'soap-hero',        icon:'ti-droplet', label:'Soap hero'},
+    {id:'quick-turnaround', icon:'ti-bolt',    label:'Quick turnaround'},
+    {id:'microwave-hero',   icon:'ti-flame',   label:'Microwave hero'},
+    {id:'barista',          icon:'ti-coffee',  label:'Office barista'},
+    {id:'month-champ',      icon:'ti-star',    label:'Champion of the month'},
   ];
-  document.getElementById('badges-row').innerHTML = badgeDefs.map(b=>
+  document.getElementById('badges-row').innerHTML=badgeDefs.map(b=>
     `<div class="badge ${state.badges.includes(b.id)?'earned':'locked'}"><i class="ti ${b.icon}"></i>${b.label}</div>`
   ).join('');
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2800);
+// ── Auto-refresh every 30s ────────────────────────────────────
+function scheduleRefresh(){
+  clearTimeout(refreshTimer);
+  refreshTimer=setTimeout(()=>{ loadScores(true); scheduleRefresh(); },30000);
 }
 
-// ─── Init ─────────────────────────────────────────────────────
-document.getElementById('goal-input').addEventListener('change',()=>{render();saveScores();});
-document.getElementById('week-label').textContent = getWeekLabel();
+// ── Init ──────────────────────────────────────────────────────
+document.getElementById('goal-input').addEventListener('change',()=>{ render(); saveScores(); });
+document.getElementById('week-label').textContent=getWeekLabel();
 loadScores(false);
 scheduleRefresh();
 </script>
